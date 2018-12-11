@@ -1,0 +1,32 @@
+<html>
+	<body>
+		
+		
+		Edit Item
+		<br>
+		<br>
+		<form action="{{url_for('edit_item', item_title=item.title)}}" method="POST">
+		Title
+		<br>
+		<input type="text" name="item_title" value="{{item.title}}">	
+		<br>
+		Description
+		<br>
+		<input type="text" name="item_description" value="{{item.description}}" >	
+		<br>
+		Categories
+		<br>
+		<select name="category_id" >
+				<option value="{{item.category.id}}" selected >{{item.category.title}}</option>
+			{%for category in categories: %}
+				<option  value="{{category.id}}">{{category.title}}</option>
+			{%endfor%}
+		</select>
+		<br>
+		<br>
+		<input type="Submit" value="Submit" />
+		</form>
+
+
+	</body>
+</html>

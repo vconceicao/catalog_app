@@ -1,0 +1,16 @@
+<html>
+	<body>
+		
+		
+		{{item.title}}
+		<br>
+		<br>
+		
+		{{item.description}}
+		
+		<br>
+		<br>
+		<a href="{{url_for('edit_item', item_title= item.title)}}">Edit</a> | <a href="{{url_for('remove_item', item_title=item.title)}}">Remove</a> 
+
+	</body>
+</html>
