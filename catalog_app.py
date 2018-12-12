@@ -1,8 +1,20 @@
-from flask import Flask, render_template,request, redirect, url_for, jsonify, flash
+from flask import Flask, render_template,request, redirect, url_for, jsonify, flash, session as login_session, make_response
 from database_setup import Category, Item
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, Item
+import random
+import string
+from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
+import httplib2
+import json
+import requests
+
+
+CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
+
+
+
 
 
 app = Flask('__name__')
@@ -10,6 +22,8 @@ engine = create_engine('sqlite:///catalog.db',  connect_args={'check_same_thread
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+
 
 @app.route('/')
 def main():
@@ -20,10 +34,124 @@ def main():
 	items = session.query(Item).all()
 	categories = session.query(Category).all()
 	return render_template('lastest_items.html', categories = categories, items=items)
+	
+@app.route('/login')
+def showLogin():
+	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+	login_session['state'] = state
+	return render_template('login.html', STATE=state)
+
+@app.route('/gconnect', methods=['POST'])	
+def gconnect():
+	if request.args.get('state')!=login_session['state']:
+		response = make_response(json.dumps('Invalid statues'), 401)
+		response.headers['Content-Type']='application/json'
+		return response
+	code = request.data
+	try:
+		oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+		oauth_flow.redirect_uri = 'postmessage'
+		credentials = oauth_flow.step2_exchange(code)
+	except FlowExchangeError:
+		response = make_response(json.dumps('Failed to upgrade the auth code'), 401)
+		response.headers['Content-Type']='application/json'
+		return response
+		
+	access_token = credentials.access_token
+	print access_token
+	print 'olha '
+	url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token)
+	h = httplib2.Http()
+	result=json.loads(h.request(url, 'GET')[1])
+	print result
+	
+	if result.get('error') is not None:
+		response = make_response(json.dumps(result.get('error')), 500)
+		response.headers['Content-Type']='application/json'
+		return
+	
+	gplus_id = credentials.id_token['sub']
+	
+	
+	
+	#verify that the access token is used for the intended user.
+	if result['user_id'] != gplus_id:
+		response = make_response('Token user ID doesnt match given user ID', 401)
+		response.headers['Content-Type']= 'application/json'
+		return response
+		
+	#verify that the access token is valid for this app
+	if result['issued_to']!= CLIENT_ID:
+		response = make_response('Token client does not match the app', 401)
+		response.headers['Content-Type']= 'application/json'
+		return response
+		
+	
+	stored_access_token = login_session.get('access_token') 
+	stored_gplus_id = login_session.get('gplus_id')
+	
+	if stored_access_token is not None and gplus_id==stored_gplus_id:
+		response = make_response(json.dumps('Current user already connected.'),200)
+		response.headers['Content-Type']= 'application/json'
+		return response
+	
+		
+	# Store the access token in the session for later use.
+	login_session['access_token'] = credentials.access_token 
+	login_session['gplus_id'] =  gplus_id
+	
+	userinfo_url = 'https://www.googleapis.com/oauth2/v1/userinfo'
+	params = {'access_token': credentials.access_token, 'alt': 'json'}
+	answer = requests.get(userinfo_url, params=params) 
+	
+	data =  answer.json()
+	
+	
+	
+	
+	login_session['username'] = data['name'] 
+	login_session['picture'] = data['picture']  
+	
+	output =''
+	output += '<h1>Welcome, '
+	output += login_session['username']
+	output += '! </h1>'
+	output += '<img src="'
+	output += login_session['picture']
+	output += '" style="width:300px; height:300px"'	
+	
+	flash('You are now logged in as %s' %login_session['username'] )
+	print 'done'
+	return output
 
 
+@app.route('/gdisconnect')
+def gdisconnect():
 
 
+	access_token = login_session.get('access_token')
+	print access_token
+	if access_token is None:
+		print 'Access toke is none'
+	url = ('https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session.get('access_token'))
+	h = httplib2.Http()
+	result=h.request(url, 'GET')[0]
+	print 'resultado %s' % result['status']
+	if result['status'] == '200' :
+	 del login_session['access_token']
+	 del login_session['gplus_id']
+	 del login_session['username'] 
+	 del login_session['picture']
+	
+	 response = make_response(json.dumps('User successfully disconnected'), 200)
+	 response.headers['Content-Type'] = 'application/json'
+	 return response
+	else:
+		response = make_response(json.dumps('Something went wrong'), 400)
+		response.headers['Content-Type'] = 'application/json'
+		return response
+	
+	
 @app.route('/catalog/<category_title>/items')
 def getItems(category_title):
 	#return 'Shows all categories and all items of %s' % category_title
@@ -46,6 +174,10 @@ def add_item():
 	#return 'Adds an item'
 	categories = session.query(Category).all()
 	
+	
+	if 'username' not in login_session:
+		return redirect('/login')
+		
 	if request.method == 'POST':
 		#get form values
 		
@@ -69,6 +201,11 @@ def add_item():
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
 def edit_item(item_title):
 	#return 'Edits %s' %item_title
+	
+	if 'username' not in login_session:
+		return redirect('/login')
+	
+	
 	item = session.query(Item).filter_by(title = item_title).one()
 	categories = session.query(Category).filter(Category.id != item.category.id).all()
 	
@@ -96,6 +233,11 @@ def edit_item(item_title):
 
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
 def remove_item(item_title):
+	print login_session
+	if 'username' not in login_session:
+		return redirect('/login')
+	
+	
 	#return 'Removes %s' % item_title
 	#item = Item(id=1, title="Hello", description = "Hello World klajsldjflajsjdlfjalsjdfljasldfjlasdjlfjasdlfjlasdjfjljsdflkj")
 	item = session.query(Item).filter_by(title = item_title).one()
