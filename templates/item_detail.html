@@ -19,18 +19,23 @@
 				<h1 ><strong>Catalog App</strong></h1>
 		</div>
 		<div class="col-md-6  text-right d-sm-none  d-none d-md-block">
-			<a class="btn btn-primary btn-lg  login-button" href="#" role="button">Login</a>			
+			<a class="btn btn-primary btn-lg  login-button"  role="button">Login</a>			
 		</div>
 		
-    </header>
+    </header>		
 	
 		
         <section class="row catalog-categories">
 			<div class="col-lg-12">
 				<h1>{{item.title}}</h1>
 				<p>{{item.description}}<p>
-				<h5><a  href="{{url_for('edit_item', item_title= item.title)}}" class="badge badge-primary btn-lg">Edit</a>
-					<a href="{{url_for('remove_item', item_title=item.title)}}" class="badge badge-danger btn-lg">Delete</a></h5>
+				
+				{%if 'username' in login_session and isCreator %}
+				<h5>
+					<a  href="{{url_for('edit_item', item_title= item.title)}}" class="badge badge-primary btn-lg">Edit</a>
+					<a href="{{url_for('remove_item', item_title=item.title)}}" class="badge badge-danger btn-lg">Delete</a>
+				</h5>
+				{%endif%}
 				</div>			
         </section>
       

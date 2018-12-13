@@ -21,7 +21,16 @@ class Category(Base):
 			'title' : self.title
 			 	
 				}		
+				
+				
+class User(Base):
 
+	__tablename__='user'
+	
+	id= Column(Integer, primary_key = True)
+	username = Column(String(250))
+	picture = Column(String(250))
+	email = Column(String(250))
 
 class Item(Base):
 
@@ -35,6 +44,8 @@ class Item(Base):
 
 	category_id = Column(Integer, ForeignKey('category.id'))
 	category = relationship(Category)
+	user_id =  Column(Integer, ForeignKey('user.id'))
+	user = relationship(User)
 	
 	@property
 	def serialize(self):
@@ -45,7 +56,7 @@ class Item(Base):
 			'cat_id': self.category.id
 		}
 	
-	
 
-engine = create_engine('sqlite:///catalog.db')
+
+engine = create_engine('sqlite:///catalogwithusers.db')
 Base.metadata.create_all(engine)	

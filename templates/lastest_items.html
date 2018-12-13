@@ -21,31 +21,35 @@
 							<h1 ><strong>Catalog App</strong></h1>
 					</div>
 					<div class="col-md-6  text-right d-sm-none  d-none d-md-block">
-						<a class="btn btn-primary btn-lg login-button" href="#" role="button">Login</a>			
+							{%if 'username' not in  login_session%}
+						<a class="btn btn-primary btn-lg login-button" href="{{url_for('showLogin')}}" role="button">Login</a>	
+							{% else %}
+							<a class="btn btn-secondary btn-lg login-button" href="{{url_for('gdisconnect')}}" role="button">Logout</a>	
+							{%endif%}		
 					</div>
 					
 				</header>
 			
 				
 				<section class="row catalog-categories">
-				
-					<div class="col-lg-12">
-						{% with messages = get_flashed_messages() %}
-							{%if messages: %}
-									{%for message in messages%}
-									
-										<div class="alert alert-primary  alert-dismissible fade show" role="alert" data-dismiss="alert>
-											{{message}}
-											<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-									{%endfor%}
+				 
+			<div class="col-lg-12">
+					{% with messages = get_flashed_messages() %}
+						{%if messages: %}
+								{%for message in messages%}
 								
-						
-							{%endif%}
-						{%endwith%}
-					</div>
+									<div class="alert alert-primary  alert-dismissible fade show" role="alert" id="success-alert"  data-dismiss="alert">
+										{{message}}
+										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+												<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+								{%endfor%}
+							
+					
+						{%endif%}
+					{%endwith%}
+				</div>
 				
 					<article class="col-md-4 border-right">
 					
@@ -62,7 +66,10 @@
 					<ul class="list-group list-group-flush">
 						
 						<h3>Lastest Items</h3>
-							<a  href = "{{url_for('add_item')}}" class="list-group-item list-group-item-primary">Add Item</a>
+							{%if 'username' in login_session  %}
+								<a  href = "{{url_for('add_item')}}" class="list-group-item list-group-item-primary">Add Item</a>
+							{%endif%}
+							
 							{%for item in items %}
 
 							<a href="{{url_for('getItem', category_title = item.category.title, item_title = item.title)}}" class="list-group-item list-group-item-action">{{item.title}}</a>
