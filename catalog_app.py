@@ -173,7 +173,7 @@ def getItems(category_title):
 	categories = session.query(Category).all()
 	category = session.query(Category).filter_by(title=category_title).one()
 	items = session.query(Item).filter_by(category_id = category.id).all()
-	return render_template('selected_items.html', categories = categories, items=items)
+	return render_template('selected_items.html', categories = categories, items=items, login_session= login_session)
 
 
 @app.route('/catalog/<category_title>/<item_title>')
@@ -214,7 +214,7 @@ def add_item():
 		
 	else:
 		
-		return render_template('add_item.html', categories = categories)
+		return render_template('add_item.html', categories = categories, login_session=login_session)
 
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
 def edit_item(item_title):
@@ -248,11 +248,11 @@ def edit_item(item_title):
 		session.commit()
 		flash('The item was edited!')
 			
-		return redirect(url_for('getItems', category_title = category.title))
+		return redirect(url_for('getItems', category_title = category.title, login_session=login_session))
 		
 	else:
 	
-		return render_template('edit_item.html', item=item, categories = categories)
+		return render_template('edit_item.html', item=item, categories = categories, login_session=login_session)
 
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
 def remove_item(item_title):
@@ -281,7 +281,7 @@ def remove_item(item_title):
 	
 	else:
 	
-		return render_template('delete_item.html', item_title=item.title)
+		return render_template('delete_item.html', item_title=item.title, login_session=login_session)
 
 @app.route('/catalog/catalog.json')
 def api_json():
