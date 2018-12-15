@@ -1,16 +1,13 @@
 {%extends "base.html"%}{%block body%}
-			<div class="col-lg-12 card bg-light mb-3  rounded ">
-				<h1 class="card-title ">{{item.title}}</h1>
-				<p>{{item.description}}<p>
-				
-
-				
-				{%if 'username' in login_session and isCreator %}
-				<h5>
-					<a  href="{{url_for('edit_item', item_title= item.title)}}" class="badge badge-primary btn-lg">Edit</a>
-					<a href="{{url_for('remove_item', item_title=item.title)}}" class="badge badge-danger btn-lg">Delete</a>
-				</h5>
-				{%endif%}
-				</div>	
-						
+<div class="col-lg-12 card bg-light mb-3  rounded ">
+   <h1 class="card-title ">{{item.title}}</h1>
+   <p>{{item.description}}
+   <p>
+      {%if 'username' in login_session and isCreator %}
+   <h5>
+      <a  href="{{url_for('edit_item', item_title= item.title)}}" class="badge badge-primary btn-lg">Edit</a>
+      <a href="{{url_for('remove_item', item_title=item.title)}}" class="badge badge-danger btn-lg">Delete</a>
+   </h5>
+   {%endif%}
+</div>
 {% endblock %}

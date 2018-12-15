@@ -1,47 +1,35 @@
 {%extends "base.html"%}{%block body%}
-				 
-			<div class="col-lg-12">
-					{% with messages = get_flashed_messages() %}
-						{%if messages: %}
-								{%for message in messages%}
-								
-									<div class="alert alert-primary  alert-dismissible fade show" role="alert" id="success-alert"  data-dismiss="alert">
-										{{message}}
-										<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-								{%endfor%}
-							
-					
-						{%endif%}
-					{%endwith%}
-				</div>
-				
-					<article class="col-md-4 border-right">
-					
-					<ul class="list-group list-group-flush">
-						<h3>Categories</h3>
-							{%for category in categories %}
-								<a href="{{url_for('get_catalog_items', category_title = category.title)}}" class="list-group-item list-group-item-action">{{ category.title }}</a>
-							{% endfor%}
-						</ul>
-					</article>
-					
-					<article class="col-md-6">
-						
-					<ul class="list-group list-group-flush">
-						
-						<h3>Lastest Items</h3>
-							{%if 'username' in login_session  %}
-								<a  href = "{{url_for('add_item')}}" class="list-group-item list-group-item-primary">Add Item</a>
-							{%endif%}
-							
-							{%for item in items %}
-
-							<a href="{{url_for('get_item', category_title = item.category.title, item_title = item.title)}}" class="list-group-item list-group-item-action">{{item.title}}   ({{item.category.title}})</a>
-							{%endfor%}
-						</ul>
-					</article>
-				
-{% endblock %} 
+<div class="col-lg-12">
+   {% with messages = get_flashed_messages() %}
+   {%if messages: %}
+   {%for message in messages%}
+   <div class="alert alert-primary  alert-dismissible fade show" role="alert" id="success-alert"  data-dismiss="alert">
+      {{message}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+      </button>
+   </div>
+   {%endfor%}
+   {%endif%}
+   {%endwith%}
+</div>
+<article class="col-md-4 border-right">
+   <ul class="list-group list-group-flush">
+      <h3>Categories</h3>
+      {%for category in categories %}
+      <a href="{{url_for('get_catalog_items', category_title = category.title)}}" class="list-group-item list-group-item-action">{{ category.title }}</a>
+      {% endfor%}
+   </ul>
+</article>
+<article class="col-md-6">
+   <ul class="list-group list-group-flush">
+      <h3>Lastest Items</h3>
+      {%if 'username' in login_session  %}
+      <a  href = "{{url_for('add_item')}}" class="list-group-item list-group-item-primary">Add Item</a>
+      {%endif%}
+      {%for item in items %}
+      <a href="{{url_for('get_item', category_title = item.category.title, item_title = item.title)}}" class="list-group-item list-group-item-action">{{item.title}}   ({{item.category.title}})</a>
+      {%endfor%}
+   </ul>
+</article>
+{% endblock %}

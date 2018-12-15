@@ -1,28 +1,25 @@
 {%extends "base.html"%}{%block body%}
-				<div class="col-lg-12 card bg-light mb-3 remove-side-padding rounded">
-
-					<h2 class="card-header">Edit Item </h2>
-					<form action="{{url_for('edit_item', item_title=item.title)}}" method="POST" class="card-body"> 
-							<div class="form-group">
-								<label for="titleInput">Title</label>
-								<input type="text" class="form-control" id="titleInput"  placeholder="Enter Title"  name="item_title" value="{{item.title}}">
-								
-							</div>
-							<div class="form-group">
-								<label for="descriptionInput">Description</label>
-								<input type="text" class="form-control" id="descriptionInput" placeholder="Enter Description" name="item_description" value="{{item.description}}" >
-							</div>
-							<div class="form-group">
-									<label for="exampleFormControlSelect1">Category</label>
-									<select class="form-control" id="exampleFormControlSelect1" name="category_id">
-											<option value="{{item.category.id}}" selected >{{item.category.title}}</option>
-											{%for category in categories: %}
-												<option  value="{{category.id}}">{{category.title}}</option>
-											{%endfor%}
-									</select>
-								</div>
-							<button type="submit" class="btn btn-primary">Submit</button>
-						</form>
-
-					</div>			
+<div class="col-lg-12 card bg-light mb-3 remove-side-padding rounded">
+   <h2 class="card-header">Edit Item </h2>
+   <form action="{{url_for('edit_item', item_title=item.title)}}" method="POST" class="card-body">
+      <div class="form-group">
+         <label for="titleInput">Title</label>
+         <input type="text" class="form-control" id="titleInput"  placeholder="Enter Title"  name="item_title" value="{{item.title}}">
+      </div>
+      <div class="form-group">
+         <label for="descriptionInput">Description</label>
+         <input type="text" class="form-control" id="descriptionInput" placeholder="Enter Description" name="item_description" value="{{item.description}}" >
+      </div>
+      <div class="form-group">
+         <label for="exampleFormControlSelect1">Category</label>
+         <select class="form-control" id="exampleFormControlSelect1" name="category_id">
+            <option value="{{item.category.id}}" selected >{{item.category.title}}</option>
+            {%for category in categories: %}
+            <option  value="{{category.id}}">{{category.title}}</option>
+            {%endfor%}
+         </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+   </form>
+</div>
 {%endblock%}

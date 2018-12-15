@@ -8,8 +8,8 @@ from oauth2client.client import flow_from_clientsecrets, FlowExchangeError
 import httplib2
 import json
 import requests
-from flask import Flask, render_template, request, redirect, url_for, jsonify,
-flash, session as login_session, make_response
+from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import flash, session as login_session, make_response
 
 
 # Google Client ID
