@@ -29,7 +29,7 @@ def main():
 	"""
 	items = session.query(Item).order_by("id desc")
 	categories = session.query(Category).all()
-	return render_template('lastest_items.html', categories = categories, items=items, login_session = login_session)
+	return render_template('lastest-items.html', categories = categories, items=items, login_session = login_session)
 	
 @app.route('/login')
 def showLogin():
@@ -187,7 +187,7 @@ def getItems(category_title):
 	categories = session.query(Category).all()
 	category = session.query(Category).filter_by(title=category_title).one()
 	items = session.query(Item).filter_by(category_id = category.id).all()
-	return render_template('selected_items.html',category_title = category_title, categories = categories, items=items, login_session= login_session)
+	return render_template('selected-items.html',category_title = category_title, categories = categories, items=items, login_session= login_session)
 
 
 @app.route('/catalog/<category_title>/<item_title>')
@@ -199,7 +199,7 @@ def getItem(category_title, item_title):
 	item = session.query(Item).filter_by(title = item_title).one()
 	isCreator = login_session.get('user_id') == item.user_id
 	
-	return render_template('item_detail.html', item=item, isCreator = isCreator, login_session = login_session)
+	return render_template('item-details.html', item=item, isCreator = isCreator, login_session = login_session)
 
 @app.route('/catalog/item/new', methods= ['GET', 'POST'])
 def add_item():
@@ -233,7 +233,7 @@ def add_item():
 		
 	else:
 		#Return the page to add an item
-		return render_template('add_item.html', categories = categories, login_session=login_session)
+		return render_template('add-item.html', categories = categories, login_session=login_session)
 
 @app.route('/catalog/<item_title>/edit', methods=['GET', 'POST'])
 def edit_item(item_title):
@@ -275,7 +275,7 @@ def edit_item(item_title):
 		
 	else:
 		#Return the page to edit an item
-		return render_template('edit_item.html', item=item, categories = categories, login_session=login_session)
+		return render_template('edit-item.html', item=item, categories = categories, login_session=login_session)
 
 @app.route('/catalog/<item_title>/delete', methods=['GET', 'POST'])
 def remove_item(item_title):
