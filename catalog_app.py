@@ -15,7 +15,7 @@ CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_i
 
 
 app = Flask('__name__')
-engine = create_engine('sqlite:///catalogwithusers.db')
+engine = create_engine('sqlite:///catalogwithusers.db', connect_args={'check_same_thread': False}, echo=True)
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
@@ -122,10 +122,10 @@ def gconnect():
 	login_session['email'] = data['email']
 	
 	
-	user_id =  getUserID(login_session.get('email'))
+	user_id =  get_userID(login_session.get('email'))
 	
 	if not user_id:
-		user_id = createUser(login_session)
+		user_id = create_user(login_session)
 	
 	login_session['user_id'] = user_id
 	
@@ -180,7 +180,7 @@ def gdisconnect():
 	
 	
 @app.route('/catalog/<category_title>/items')
-def getItems(category_title):
+def get_catalog_items(category_title):
 	"""
 	Return all categories and all items of the selected category
 	"""
@@ -191,7 +191,7 @@ def getItems(category_title):
 
 
 @app.route('/catalog/<category_title>/<item_title>')
-def getItem(category_title, item_title):
+def get_item(category_title, item_title):
 	
 	"""
 	Return the selected item and its details
@@ -271,7 +271,7 @@ def edit_item(item_title):
 		session.commit()
 		flash('The item was edited!')
 			
-		return redirect(url_for('getItems', category_title = category.title, login_session=login_session))
+		return redirect(url_for('get_catalog_items', category_title = category.title, login_session=login_session))
 		
 	else:
 		#Return the page to edit an item
@@ -300,7 +300,7 @@ def remove_item(item_title):
 		session.delete(item)
 		session.commit()
 		flash('The item was removed')
-		return redirect(url_for('getItems', category_title = category_title))
+		return redirect(url_for('get_catalog_items', category_title = category_title))
 	
 	else:
 		#Returns the page to delete an item
@@ -335,7 +335,7 @@ def api_json_item(item_title):
 	
 	return jsonify(Item = item.serialize)
 
-def createUser(login_session):
+def create_user(login_session):
 	"""
 	Creates a new user based in the session data given by Google Sign In Api
 	"""
@@ -346,14 +346,14 @@ def createUser(login_session):
 	user = session.query(User).filter_by(email=newUser.email).one()
 	return user.id
 
-def getUserInfo(user_id):
+def get_user_info(user_id):
 	"""
 	Returns an user object based on its id
 	"""
 	user =session.query(User).filter_by(id=user_id).one()
 	return user
 	
-def getUserID(user_email):
+def get_userID(user_email):
 	"""
 	Return an user id by an given email
 	"""

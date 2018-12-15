@@ -1,8 +1,8 @@
 {%extends "base.html"%}{%block body%}
-				<div class="col-lg-12 card">
+				<div class="col-lg-12 card bg-light mb-3 remove-side-padding rounded ">
 
-					<h2>Add Item </h2>
-						<form action="{{url_for('add_item')}}" method="POST">
+					<h2 class="card-header" >Add Item </h2>
+						<form action="{{url_for('add_item')}} " method="POST" class="card-body">
 								<div class="form-group">
 									<label for="titleInput">Title</label>
 									<input type="text" class="form-control" id="titleInput"  placeholder="Enter Title" type="text" name="item_title">

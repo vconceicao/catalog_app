@@ -23,7 +23,7 @@
 				<ul class="list-group list-group-flush">
 					<h3>Categories</h3>
 						{%for category in categories %}
-							<a href="{{url_for('getItems', category_title = category.title)}}" class="list-group-item list-group-item-action">{{ category.title }}</a>
+							<a href="{{url_for('get_catalog_items', category_title = category.title)}}" class="list-group-item list-group-item-action">{{ category.title }}</a>
 						{% endfor%}
 					</ul>
 				</article>
@@ -38,7 +38,7 @@
 							
 						{%for item in items %}
 
-						<a href="{{url_for('getItem', category_title = item.category.title, item_title = item.title)}}" class="list-group-item list-group-item-action">{{item.title}}</a>
+						<a href="{{url_for('get_item', category_title = item.category.title, item_title = item.title)}}" class="list-group-item list-group-item-action">{{item.title}}</a>
 						{%endfor%}
 
 					</ul>

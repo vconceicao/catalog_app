@@ -7,53 +7,33 @@ h2 {
     color: #7d97ad;
 }
   
-hr {
-    border-color: #7d97ad;
-    border-top: solid;
-}
 
 body{
 	background-image: url("../images/wavy-dots.png");
-	
 
 }
 
-.portifolio-grid {
+.catalog-grid {
       
     max-width: 1200px;
     width: 100%;
 }
 
-.portifolio-header {
+.catalog-header {
     
     background-color: aquamarine;
-    
-	
    
-}
-
-.portifolio-fullname {
-    margin: 20px 0 10px 0; 
-}
-
-.featured-work {
-    margin-top: 30px;
 }
 
 .catalog-categories{
     margin-top:30px;
-   
-
 }
 
 .login-button{
     margin: 4px;
 }
 
-.portifolio-work {
-    overflow: hidden;
-    border-style: none;
-    padding: 0;
-    border-radius: 0;
-    margin-bottom: 10px;
-  }
+.remove-side-padding{
+    padding-right: 0px;
+    padding-left: 0px;
+}
