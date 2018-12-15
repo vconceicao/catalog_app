@@ -1,5 +1,5 @@
 {%extends "base.html"%}{%block body%}
-				<div class="col-lg-6">
+				<div class="col-lg-12 card">
 
 					<h2>Add Item </h2>
 						<form action="{{url_for('add_item')}}" method="POST">
@@ -10,7 +10,7 @@
 								</div>
 								<div class="form-group">
 									<label for="descriptionInput">Description</label>
-									<input type="text" class="form-control" id="descriptionInput" placeholder="Enter Description"  type="text" name="item_description">
+									<input type="text" class="form-control" id="descriptionInput" placeholder="Enter Description"  type="text" 		     				 name="item_description">
 								</div>
 								<div class="form-group">
 										<label for="categories-options">Category</label>

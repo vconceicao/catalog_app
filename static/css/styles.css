@@ -12,6 +12,12 @@ hr {
     border-top: solid;
 }
 
+body{
+	background-image: url("images/wavy-dots.png")
+	
+
+}
+
 .portifolio-grid {
       
     max-width: 1200px;

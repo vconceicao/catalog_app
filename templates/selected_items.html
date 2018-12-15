@@ -31,8 +31,11 @@
 				<article class="col-md-6">
 				
 				<ul class="list-group list-group-flush">
-					<h3>Selected Items</h3>
-						<a  href = "{{url_for('add_item')}}" class="list-group-item list-group-item-primary">Add Item</a>
+					<h3>{{category_title}} Items</h3>
+							{%if 'username' in login_session  %}
+								<a  href = "{{url_for('add_item')}}" class="list-group-item list-group-item-primary">Add Item</a>
+							{%endif%}
+							
 						{%for item in items %}
 
 						<a href="{{url_for('getItem', category_title = item.category.title, item_title = item.title)}}" class="list-group-item list-group-item-action">{{item.title}}</a>
