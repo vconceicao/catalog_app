@@ -263,7 +263,7 @@ def edit_item(item_title):
         Category.id != item.category.id).all()
 
     if item.user.id != login_session['user_id']:
-        return 'Not Allowed'
+        return 'You are not allowed make this action. Contact %s for further information about this item.'  % item.user.username
 
     if request.method == 'POST':
         # Get the form data
@@ -309,7 +309,7 @@ def remove_item(item_title):
     category_title = item.category.title
 
     if item.user.id != login_session['user_id']:
-        return 'Not Allowed'
+        return 'You are not allowed make this action. Contact %s for further information about this item.'  % item.user.username
 
     if request.method == 'POST':
         # Removes the item from the database
