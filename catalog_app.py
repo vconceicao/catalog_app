@@ -27,7 +27,7 @@ session = DBSession()
 @app.route('/')
 def main():
     """
-    Returns all categories and lastest items added'
+    Returns all categories and lastest items added '
     """
     items = session.query(Item).order_by("id desc")
     categories = session.query(Category).all()
