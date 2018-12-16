@@ -28,7 +28,7 @@ OR
     - client_secret.json
 - Back to the virtual machine terminal that you opened before to launch the Vagrant VM.
 - Navigate to the project directory and type in the following command: python catalog_app.py
-- Access and test the application by visiting http://localhost:8000 locally
+- Access and test the application by visiting http://localhost:5000 locally
 
 
 ### Screenshot ###
