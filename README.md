@@ -29,3 +29,13 @@ OR
 - Back to the virtual machine terminal that you opened before to launch the Vagrant VM.
 - Navigate to the project directory and type in the following command: python catalog_app.py
 - Access and test the application by visiting http://localhost:8000 locally
+
+
+### Screenshot ###
+![Alt text](https://raw.githubusercontent.com/vconceicao/catalog_app/master/screen1.PNG)
+
+## API ##
+### JSON ###
+![Alt text](https://raw.githubusercontent.com/vconceicao/catalog_app/master/json-api.PNG)
+
+![Alt text](https://raw.githubusercontent.com/vconceicao/catalog_app/master/json-api2.PNG)
